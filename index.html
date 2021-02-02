@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>JSX - składnia React do tworzenie struktury</title>
+	<!-- Plik ze stylami css -->
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+	<!-- Element HTML pełniący rolę kontenera dla aplikacji React -->
+	<div id="root"></div>
+	<!-- Biblioteka React -->
+	<script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+	<!-- Biblioteka React DOM -->
+	<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+	<!-- Babel - Nie korzystamy na produkcji (tylko podczas developmentu) -->
+	<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+	<!-- Nasz kod - kompilowanie JSX i ES6 do ES5 - zwróc uwagę na atrybut type (domyślnie: type='text/javascript -->
+	<script type="text/babel">
+
+	class Counter extends React.Component {
+  
+  state = {
+    clickCount: 0,
+    result: 0
+  }
+  
+  handleClick = (type, number) => {
+    if(type === "subtraction") {
+      this.setState(prevState => ({
+        clickCount:  prevState.clickCount + 1,
+        result: prevState.result - number
+      }))
+    }
+    else if(type === "reset") {
+      this.setState(prevState => ({
+        clickCount:  prevState.clickCount + 1,
+        result: 0
+      }))
+    }
+    else if(type === "addition") {
+      this.setState(prevState => ({
+        clickCount:  prevState.clickCount + 1,
+        result: prevState.result + number
+      }))
+    }
+  }
+
+  render() {
+    return (
+      <>
+      <MathButton 
+          name="-1" 
+          number="1" 
+          type="subtraction" 
+          handleClick={this.handleClick}
+        />
+        <MathButton 
+          name="-10" 
+          number="10" 
+          type="subtraction" 
+          handleClick={this.handleClick}
+        />
+        <MathButton 
+          name="Reset"
+          type="reset" 
+          handleClick={this.handleClick}
+        />
+        <MathButton 
+          name="+10" 
+          number="10" 
+          type="addition" 
+          handleClick={this.handleClick}
+        />
+        <MathButton 
+          name="+1" 
+          number="1" 
+          type="addition" 
+          handleClick={this.handleClick}
+        />
+        <HeaderResult 
+          text = "Click count: "
+          result = {this.state.clickCount}
+        />
+        <HeaderResult 
+          text = "Result: "
+          result = {this.state.result}
+        />
+      </>
+    )
+  }
+}
+
+const MathButton = (props) => {
+  const parsedNumber = parseInt(props.number)
+  return (
+  <button onClick={() => props.handleClick(props.type, parsedNumber)}>{props.name}</button>
+  )
+}
+
+const HeaderResult = (props) => {
+  return (
+    <h1>{props.text + props.result}</h1>
+  )
+}
+
+ReactDOM.render(<Counter />, document.getElementById('root'))
+	</script>
+</body>
+
+</html>
